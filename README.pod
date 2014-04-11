@@ -4,11 +4,11 @@
 
 =head1 NAME
 
-Mojolicious::Plugin::PDFRenderer - Uses wkhtmltopdf via PDF::WebKit to render your app exactly as it looks in Chrome/WebKit but vector scalable and in PDF.
+Mojolicious::Plugin::DumpyLog - Automatically runs Data::Dumper against the last element in the list passed to any ->log->method() if it's a ref.
 
 =head1 VERSION
 
-version 0.03
+version 0.01
 
 =head1 SYNOPSIS
 
@@ -18,39 +18,21 @@ version 0.03
     sub startup {
         my $self = shift;
 
-        $self->plugin( 'Mojolicious::Plugin::PDFRenderer', {
-            javascript_delay => 1000
-            , load_error_handling => 'ignore'
-            , page_height => '5in'
-            , page_width => '10.5in'
-            # options that would otherwise be passed to PDF::WebKit,
-            # see `wkhtmltopdf --extended-help` for more (replace dashes w/ underscores)
-        } );
+        $self->plugin( 'Mojolicious::Plugin::DumpyLog' );
         # ...
     }
 
-Then go to http://yourapp:3000/any/route, take a good look, then go to http://yourapp:3000/any/route.pdf. Cool, huh?
+then
 
-=head1 REQUIREMENTS
+    package App::Example;
+    use Mojo::Base 'Mojolicious::Controller';
 
-=over 2
-
-=item L<PDF::WebKit>
-
-=item L<"wkhtmltopdf"|http://wkhtmltopdf.org/>
-
-=item A preforking server instance running (e.g. ./script/app prefork [...] or ./script/app hypnotoad [...], etc) with at least 2
-connections / workers available so that the extension can hit the back-end again, i.e. a request in a request.
-
-=back
-
-=head1 SEE ALSO
-
-=over 2
-
-=item Other cool stuff I've written
-
-=back
+    sub test {
+        my $self = shift;
+        my %foo = ( bar => 'baz' );
+        $self->debug( "foo", "bar", "baz", \%foo );
+        $self->render( json => [] );
+    }
 
 =for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
@@ -59,7 +41,7 @@ connections / workers available so that the extension can hit the back-end again
 =head2 Bugs / Feature Requests
 
 Please report any bugs or feature requests through the issue tracker
-at L<https://github.com/sharabash/mojolicious-plugin-pdfrenderer/issues>.
+at L<https://github.com/sharabash/mojolicious-plugin-dumpylog/issues>.
 You will be notified automatically of any progress on your issue.
 
 =head2 Source Code
@@ -67,9 +49,9 @@ You will be notified automatically of any progress on your issue.
 This is open source software.  The code repository is available for
 public review and contribution under the terms of the license.
 
-L<https://github.com/sharabash/mojolicious-plugin-pdfrenderer>
+L<https://github.com/sharabash/mojolicious-plugin-dumpylog>
 
-  git clone git://github.com/sharabash/mojolicious-plugin-pdfrenderer.git
+  git clone git://github.com/sharabash/mojolicious-plugin-dumpylog.git
 
 =head1 AUTHOR
 
